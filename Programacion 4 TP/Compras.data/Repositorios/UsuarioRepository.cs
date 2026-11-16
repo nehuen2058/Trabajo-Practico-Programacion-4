@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Compras.data.Db;
+﻿using Compras.data.Db;
 using Compras.data.Modelos;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using static Compras.data.Repositorios.UsuarioRepository;
 
 
 namespace Compras.data.Repositorios
 {
-    public class UsuarioRepository
+    public class UsuarioRepository : IUsuarioRepository
     {
         public interface IUsuarioRepository
         {
@@ -18,6 +19,11 @@ namespace Compras.data.Repositorios
         }
 
         private ComprasContext _db;
+
+        public UsuarioRepository(ComprasContext context)
+        {
+            _db = context;
+        }
 
 
         public List<String> ObtenerAcciones(string Email)
@@ -40,7 +46,7 @@ namespace Compras.data.Repositorios
                                       .ToList();
                 return acciones;
             }
-            catch (Exception ex)
+            catch
             {
 
                 return new List<string>();
@@ -62,7 +68,7 @@ namespace Compras.data.Repositorios
 
                 return usuario;
             }
-            catch (Exception ex)
+            catch
             {
 
                 return null;

@@ -8,7 +8,7 @@ using Programacion_4_TP.Models;
 using System.Diagnostics;
 public class ProductosController : Controller
 {
-    private readonly ComprasContext _context;
+
     private IProductoRepository _ProductoRepository;
 
     public ProductosController(IProductoRepository ProductoRepository)
@@ -22,7 +22,6 @@ public class ProductosController : Controller
 
         List<ProductoVM> Productos = new List<ProductoVM>();
         var Productosdb = _ProductoRepository.ObtenerProductos();
-
         Productos = Productosdb.Select(x => new ProductoVM { Id = x.Id, Nombre = x.Nombre, Precio = x.Precio, Cantidad = x.Cantidad }).ToList();
         return View(Productos);
     }

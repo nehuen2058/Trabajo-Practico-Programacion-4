@@ -24,5 +24,7 @@ namespace Compras.data.Db
         public DbSet<RolAccion> RolesAcciones => Set<RolAccion>();
 
         public DbSet<Accion> Acciones => Set<Accion>();
+
+        public DbSet<Carrito> Carritos => Set<Carrito>();
     }
 }

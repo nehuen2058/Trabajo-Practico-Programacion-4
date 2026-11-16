@@ -1,12 +1,16 @@
 using Compras.data.Db;
 using Compras.data.Repositorios;
+using Compras.data.Inyecciones;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ComprasContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDataAccess(
+    builder.Configuration.GetConnectionString("DefaultConnection")!);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -37,13 +41,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.MapStaticAssets();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
