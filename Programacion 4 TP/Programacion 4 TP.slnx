@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="Programacion 4 TP/Programacion 4 TP.csproj" />
+  <Project Path="Compras.data/Compras.data.csproj" />
+  <Project Path="Programacion 4 TP/compras.web.csproj" />
 </Solution>
