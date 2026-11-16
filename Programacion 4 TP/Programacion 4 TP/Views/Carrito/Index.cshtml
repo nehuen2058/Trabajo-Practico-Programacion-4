@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Programacion_4_TP.Models.CarritoVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Carrito</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Precio)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Cantidad)
+                </td>
+                <td>
+                    <a asp-action="comprar" asp-route-id="@item.IdCarrito">Comprar</a> |
+                    <a asp-action="Eliminar" asp-route-id="@item.IdCarrito">Eliminar Del carrito</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
