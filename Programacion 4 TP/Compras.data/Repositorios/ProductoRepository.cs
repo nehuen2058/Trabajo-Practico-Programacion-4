@@ -14,6 +14,8 @@ namespace Compras.data.Repositorios
         bool BorrarProducto(int id);
         Producto ObtenerProductoPorId(int id);
         List<Producto> ObtenerProductos();
+        void RestarCantidad(int id);
+        List<Producto> ObtenerProductosDisponibles();
     }
     public class ProductoRepository : IProductoRepository
 
@@ -74,6 +76,18 @@ namespace Compras.data.Repositorios
             { 
                 return false;
             }
+        }
+        public void RestarCantidad(int id)
+        {
+            var item = ObtenerProductoPorId(id);
+
+            item.Cantidad -= 1;
+            _db.SaveChanges();
+            return;
+        }
+        public List<Producto> ObtenerProductosDisponibles()
+        {
+            return _db.Productos.Where(x => !x.Borrado && x.Cantidad > 0).ToList();
         }
     }
 }

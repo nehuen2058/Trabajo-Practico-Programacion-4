@@ -48,9 +48,7 @@ public class ProductosController : Controller
     public ActionResult Create(ProductoVM ProductoNuevo)
     {
         if (!ModelState.IsValid)
-        {
-
-            ViewBag.Mensaje = "Error";
+        { 
             return View(ProductoNuevo);
         }
         try
@@ -62,7 +60,6 @@ public class ProductosController : Controller
             Producto.Cantidad = ProductoNuevo.Cantidad;
 
             _ProductoRepository.AgregarProducto(Producto);
-            TempData["Mensaje"] = "Evento creado Exitoso";
             return RedirectToAction(nameof(Index));
         }
         catch
@@ -71,7 +68,7 @@ public class ProductosController : Controller
         }
     }
 
-    // GET: PRODUCTOVMS/Edit/5
+    // GET: PRODUCTOVMS/Edit/
     public ActionResult Edit(int id)
     {
         ProductoVM elemento = null;

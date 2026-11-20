@@ -17,7 +17,9 @@ namespace Compras.data.Modelos
 
         public int IdProducto { get; set; }
         [ForeignKey(nameof(IdProducto))]
-        public Producto Producto { get; set; } 
+        public Producto Producto { get; set; }
+
+        public int Cantidad { get; set; } = 1;
 
     }
 }

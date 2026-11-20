@@ -1,44 +1,47 @@
-﻿@model IEnumerable<Programacion_4_TP.Models.CarritoVM>
+﻿@model List<CarritoVM>
 
-@{
-    ViewData["Title"] = "Index";
+<h1>Mi carrito</h1>
+
+@if (!Model.Any())
+{
+    <p>Tu carrito está vacío.</p>
 }
+else
+{
+    <table class="table">
+        <thead>
+            <tr><th>Producto</th><th>Precio</th><th>Cantidad</th><th>Subtotal</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model)
+            {
+                <tr>
+                    <td>@i.Nombre</td>
+                    <td>@i.Precio.ToString("C")</td>
+                    <td>@i.Cantidad</td>
+                    <td>@i.Subtotal.ToString("C")</td>
+                    <td>
+                        <form asp-action="Quitar" method="post" 
+                        onsubmit="return confirm('¿Quitar este producto del carrito?');">
+                            <input type="hidden" name="idCarrito" value="@i.IdCarrito"/>
+                            <button class="btn btn-sm btn-outline-danger">Quitar</button>
+                        </form>
+                        <form asp-action="Comprar" method="post"
+                              onsubmit="return confirm('¿Comprar el producto del carrito?');">
+                            <input type="hidden" name="idCarrito" value="@i.IdCarrito"/>
+                            <button class="btn btn-sm btn-outline-primary">Comprar</button>
+                        </form>
 
-<h1>Carrito</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Precio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cantidad)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
             <tr>
-                <td>
-                    @Html.DisplayFor(model => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Precio)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Cantidad)
-                </td>
-                <td>
-                    <a asp-action="comprar" asp-route-id="@item.IdCarrito">Comprar</a> |
-                    <a asp-action="Eliminar" asp-route-id="@item.IdCarrito">Eliminar Del carrito</a>
-                </td>
+                <th colspan="3" class="text-end">Total</th>
+                <th>@Model.Sum(i => i.Subtotal).ToString("C")</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </tfoot>
+    </table>
+}

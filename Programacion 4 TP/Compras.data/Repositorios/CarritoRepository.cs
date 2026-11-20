@@ -16,6 +16,7 @@ namespace Compras.data.Repositorios
             void AgregarAlCarrito(int idUsuario, int idProducto);
 
             void QuitarDelCarrito(int idUsuario, int IdCarrito);
+            public void Comprar(int idUsuario, int idCarrito);
 
         }
 
@@ -32,28 +33,57 @@ namespace Compras.data.Repositorios
                 .Where(c => c.IdUsuario == idUsuario)
                 .ToList();
         }
-        public void AgregarAlCarrito(int idUsuario, int idProducto)
-        {
-            var item = _db.Carritos
-                .FirstOrDefault(c => c.IdUsuario == idUsuario && c.IdProducto == idProducto);
 
+        public void AgregarAlCarrito(int idProducto, int idUsuario)
+        {
+            if (idUsuario == 0 || idProducto == 0) return;
+
+            var item = _db.Carritos
+                       .FirstOrDefault(c => c.IdUsuario == idUsuario && c.IdProducto == idProducto);
+
+            var producto = _db.Productos.FirstOrDefault(p => p.Id == idProducto && !p.Borrado);
+            if (producto == null || producto.Cantidad < 1) {
+                throw new InvalidOperationException("No hay stock disponible.");
+                }
             if (item == null)
+            {
                 _db.Carritos.Add(new Carrito
                 {
                     IdUsuario = idUsuario,
-                    IdProducto = idProducto
-                });
+                    IdProducto = idProducto,
+                    Cantidad = 1
 
+                });
+            }
+            else
+            {
+                item.Cantidad += 1;
+            }
             _db.SaveChanges();
         }
+
         public void QuitarDelCarrito(int idUsuario, int idCarrito)
         {
             var item = _db.Carritos
-                .FirstOrDefault(c => c.IdCarrito == idCarrito && c.IdUsuario == idUsuario);
+                        .FirstOrDefault(c => c.IdUsuario == idUsuario && c.IdCarrito == idCarrito);
+            if (item == null) return;
+
+            var producto = _db.Productos.FirstOrDefault(p => p.Id == item.IdProducto);
+            if (producto != null)
+                producto.Cantidad += item.Cantidad;
+
+            _db.Carritos.Remove(item);
+            _db.SaveChanges();
+        }
+        public void Comprar(int idUsuario, int idCarrito)
+        {
+            var item = _db.Carritos
+                        .FirstOrDefault(c => c.IdUsuario == idUsuario && c.IdCarrito == idCarrito);
             if (item == null) return;
 
             _db.Carritos.Remove(item);
             _db.SaveChanges();
         }
+
     }
 }

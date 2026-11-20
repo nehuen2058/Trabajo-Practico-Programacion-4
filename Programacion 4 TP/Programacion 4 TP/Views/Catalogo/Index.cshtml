@@ -6,39 +6,58 @@
 
 <h1>Catalogo</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Precio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cantidad)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (!Model.Any())
+{
+    <p>Disculpe, no tenemos productos disponibles.</p>
+}
+else
+{
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(model => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Precio)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Cantidad)
-                </td>
-                <td>
-                    <a asp-action="comprar" asp-route-id="@item.Id">Comprar</a> |
-                    <a asp-action="detalle" asp-route-id="@item.Id">Detalle</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Precio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cantidad)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Precio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Cantidad)
+                    </td>
+                    <td>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <form asp-controller="Catalogo" asp-action="agregar" method="post"
+                            onsubmit="return confirm('¿Agregar este producto al carrito?');">
+                                <input type="hidden" name="idProducto" value="@item.Id" />
+                                <button class="btn btn-sm btn-outline-primary">Agregar al carrito</button>
+                            </form>
+                        }
+                        <a asp-action="detalle" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Detalle</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

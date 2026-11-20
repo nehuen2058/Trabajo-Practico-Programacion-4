@@ -3,6 +3,7 @@ using Compras.data.Modelos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using static Compras.data.Repositorios.UsuarioRepository;
 
@@ -16,6 +17,8 @@ namespace Compras.data.Repositorios
             Usuario ObtenerOCrearUsuario(string email, string nombre);
             List<String> ObtenerAcciones(string email);
 
+            public Usuario ObtenerUsuarioPorId(int idUsuario);
+            public Usuario ObtenerUsuarioPorEmail(string email);
         }
 
         private ComprasContext _db;
@@ -74,8 +77,24 @@ namespace Compras.data.Repositorios
                 return null;
             }
 
+        }
+        public Usuario ObtenerUsuarioPorId(int idUsuario)
+        {
 
+            Usuario Usuario = _db.Usuarios
+                                .Where(x => x.IdUsuario == idUsuario)
+                                .FirstOrDefault();
+
+            return Usuario;
+        }
+
+        public Usuario ObtenerUsuarioPorEmail(string email)
+        {
+            var usuario = _db.Usuarios.FirstOrDefault(u => u.Email == email);
+
+            return usuario;
 
         }
+
     }
 }

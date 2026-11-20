@@ -30,6 +30,9 @@ namespace Compras.data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCarrito"));
 
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdProducto")
                         .HasColumnType("int");
 
