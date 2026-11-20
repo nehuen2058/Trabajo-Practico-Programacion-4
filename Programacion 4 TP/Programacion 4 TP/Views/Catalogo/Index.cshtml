@@ -46,7 +46,7 @@ else
                         @Html.DisplayFor(model => item.Cantidad)
                     </td>
                     <td>
-                        @if (User.Identity?.IsAuthenticated == true)
+                        @if (User.Claims.Any(x => x.Type == "Permiso" && x.Value == "Comprar"))
                         {
                             <form asp-controller="Catalogo" asp-action="agregar" method="post"
                             onsubmit="return confirm('¿Agregar este producto al carrito?');">
